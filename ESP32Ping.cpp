@@ -80,20 +80,11 @@ void PingClass::_ping_recv_cb(void *opt, void *resp) {
     
 
     // Some debug info
-    DEBUG_PING(
-            "DEBUG: ping reply\n"
-                    "\ttotal_count = %d \n"
-                    "\tresp_time = %f ms\n"
-                    "\tseqno = %d \n"
-                    "\ttimeout_count = %d \n"
-                    "\tbytes = %d \n"
-                    "\ttotal_bytes = %d \n"
-                    "\ttotal_time = %f s\n"
-                    "\tping_err = %d \n",
-            ping_resp->total_count, ping_resp->resp_time, ping_resp->seqno,
+    Serial.printf("@%010d,ping reply,total_count=%d,resp_time=%f ms,seqno=%d,timeout_count=%d,bytes=%d,total_bytes=%d,total_time=%fs,ping_err=%d",
+            millis(),ping_resp->total_count, ping_resp->resp_time, ping_resp->seqno,
             ping_resp->timeout_count, ping_resp->bytes, ping_resp->total_bytes,
-            ping_resp->total_time, ping_resp->ping_err
-    );
+            ping_resp->total_time, ping_resp->ping_err);
+	Serial.println();
 
     // Is it time to end?
     DEBUG_PING("Avg resp time %f ms\n", _avg_time);
@@ -103,7 +94,8 @@ void PingClass::_ping_recv_cb(void *opt, void *resp) {
     
     // just a check ...
     if (_success + _errors != _expected_count) {
-        DEBUG_PING("Something went wrong: _success=%d and _errors=%d do not sum up to _expected_count=%d\n",_success, _errors, _expected_count );
+        Serial.printf("@%010d,Something went wrong: _success=%d and _errors=%d do not sum up to _expected_count=%d\n",millis(),_success, _errors, _expected_count );
+		Serial.println();
     }
 }
 
