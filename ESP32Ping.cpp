@@ -21,6 +21,7 @@
 
 extern "C" void esp_schedule(void) {};
 extern "C" void esp_yield(void) {};
+extern String CLI_Prefix();
 
 PingClass::PingClass() {}
 
@@ -80,8 +81,9 @@ void PingClass::_ping_recv_cb(void *opt, void *resp) {
     
 
     // Some debug info
-    Serial.printf("@%010d,ping reply,total_count=%d,resp_time=%f ms,seqno=%d,timeout_count=%d,bytes=%d,total_bytes=%d,total_time=%fs,ping_err=%d",
-            millis(),ping_resp->total_count, ping_resp->resp_time, ping_resp->seqno,
+    Serial.printf("%s,ping reply,total_count=%lu,resp_time=%f ms,seqno=%lu,timeout_count=%lu,bytes=%lu,total_bytes=%lu,total_time=%fs,ping_err=%d",
+    		CLI_Prefix().c_str(),
+			ping_resp->total_count, ping_resp->resp_time, ping_resp->seqno,
             ping_resp->timeout_count, ping_resp->bytes, ping_resp->total_bytes,
             ping_resp->total_time, ping_resp->ping_err);
 	Serial.println();
@@ -94,7 +96,8 @@ void PingClass::_ping_recv_cb(void *opt, void *resp) {
     
     // just a check ...
     if (_success + _errors != _expected_count) {
-        Serial.printf("@%010d,Something went wrong: _success=%d and _errors=%d do not sum up to _expected_count=%d\n",millis(),_success, _errors, _expected_count );
+        Serial.printf("%s,Something went wrong: _success=%d and _errors=%d do not sum up to _expected_count=%d\n",
+        		CLI_Prefix().c_str(),_success, _errors, _expected_count );
 		Serial.println();
     }
 }
